@@ -1,6 +1,6 @@
 
 import React, {useEffect, useState} from 'react';
-import { StyleSheet, Text, View, StatusBar, FlatList } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, FlatList, TouchableOpacity } from 'react-native';
 import api from "./src/services/api";
 
 export default function App() {
@@ -12,7 +12,17 @@ export default function App() {
         console.log(response.data)
         setProjects(response.data)
       })
-    }, [])
+    }, []);
+
+    async function handleAddProject(){
+      const response = await api.post('projeto', {
+        title: `Projetos`,
+        dev: 'Dev test'
+      })
+
+      const project = response.data
+      setProjects([...projects, project])
+    }
 
   return (
     <>
@@ -32,6 +42,12 @@ export default function App() {
         )}
       />
 
+      <TouchableOpacity actionOpacity={0.8} style={styles.button} onPress={handleAddProject}>
+        <Text style={styles.buttonText}>
+          Adicionar Projeto
+        </Text>
+      </TouchableOpacity>
+
    {/* <View style={styles.projects}>
       <Text style={styles.titleProjects}>Projetos:</Text>
     {projects.map((project) => (
@@ -48,12 +64,12 @@ export default function App() {
 const styles = StyleSheet.create({
   div: {
     flex: 1,
-    backgroundColor: '#0c94ac',
+    backgroundColor: '#64B1AD',
     alignItems: 'center',
     justifyContent: 'center',
   },
   title:{
-    color:'white',
+    color:'#501CAD',
     fontSize: 50,
     fontWeight: 'bold',
     marginTop: 60,
@@ -75,4 +91,19 @@ const styles = StyleSheet.create({
   project: {
     color: "yellow",
   },
+  button: {
+    alignSelf: 'stretch',
+    backgroundColor: '#0000F6',
+    margin: 20,
+    height: 50,
+    borderRadius: 7,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 40,
+  },
+  buttonText: {
+    color: '#ED7107',
+    fontSize: 20,
+    fontWeight: 'bold',
+  }
 });
